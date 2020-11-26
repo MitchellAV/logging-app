@@ -1,21 +1,39 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const { ensureAuth, ensureGuest } = require("../middleware/auth");
-const { Post } = require("../models/post");
+const { ensureAuth } = require("../middleware/auth");
+const Post = require("../models/post");
 
-router.get("/dashboard", ensureAuth, async (req, res) => {
+// @desc	Redirect to dashboard if Auth was successful
+// @route	/api/user
+router.get("/user", (req, res) => {
+	if (req.user) {
+		res.status(200).json(req.user.firstName);
+	} else {
+		res.status(401).json({ msg: "Unauthorized" });
+	}
+});
+
+// @desc	Redirect to dashboard if Auth was successful
+// @route	/api/addPost
+router.post("/addPost", ensureAuth, async (req, res) => {
+	const newPost = { ...req.body, user_id: req.user._id };
 	try {
-		const posts = await Post.find({}).lean();
-		res.render("./pages/dashboard", { posts: posts });
+		await Post.create(newPost);
+		res.status(200).json(newPost);
 	} catch (err) {
 		console.error(err);
 	}
 });
 
-router.get("/:id", ensureAuth, (req, res) => {});
-router.post("/", ensureAuth, (req, res) => {});
-router.put("/:id", ensureAuth, (req, res) => {});
-router.delete("/:id", ensureAuth, (req, res) => {});
+router.get("/getPosts", ensureAuth, async (req, res) => {
+	try {
+		const allPosts = await Post.find({}).populate("user_id");
+		console.log(allPosts);
+		res.status(200).json(allPosts);
+	} catch (err) {
+		console.error(err);
+	}
+});
 
 module.exports = router;

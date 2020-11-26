@@ -5,24 +5,29 @@ const router = express.Router();
 // GOOGLE Authentication
 // @desc	Authenticate user
 // @route	/auth/google
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+router.get(
+	"/google",
+	passport.authenticate("google", {
+		scope: ["profile"]
+	})
+);
 
 // @desc	Redirect to dashboard if Auth was successful
 // @route	/auth/google/callback
 router.get(
 	"/google/callback",
-	passport.authenticate("google", { failureRedirect: "/" }),
-	function (req, res) {
+	passport.authenticate("google", { failureRedirect: "/login" }),
+	(req, res) => {
 		// Successful authentication, redirect home.
-		res.redirect("/dashboard");
+		res.redirect("http://localhost:3000/dashboard");
 	}
 );
 
 // @desc	Logout user
 // @route	/auth/logout
 router.get("/logout", (req, res) => {
-	req.logOut();
-	res.redirect("/");
+	req.logout();
+	res.redirect("http://localhost:3000/");
 });
 
 module.exports = router;

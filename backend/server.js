@@ -1,21 +1,22 @@
-const express = require("express");
 const dotenv = require("dotenv");
-const cors = require("cors");
-const passport = require("passport");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
-const connectDB = require("./config/db");
-
 dotenv.config({ path: "./config/config.env" });
 
+const express = require("express");
+const session = require("express-session");
+
+const cors = require("cors");
+const passport = require("passport");
+
+const mongoose = require("mongoose");
+const MongoStore = require("connect-mongo")(session);
+const connectToDB = require("./config/db");
+
 const app = express();
-connectDB();
+connectToDB();
 
 app.use(cors());
-
-// Passport config
-require("./config/passport")(passport);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Sessions
 app.use(
@@ -29,16 +30,16 @@ app.use(
 	})
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Passport config
+require("./config/passport")(passport);
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes
-app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
+app.use("/api", require("./routes/crud"));
 
 const PORT = process.env.PORT || 5000;
 

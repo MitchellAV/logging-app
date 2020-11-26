@@ -3,14 +3,7 @@ module.exports = {
 		if (req.isAuthenticated()) {
 			return next();
 		} else {
-			res.redirect("/");
-		}
-	},
-	ensureGuest: function (req, res, next) {
-		if (req.isAuthenticated()) {
-			res.redirect("/dashboard");
-		} else {
-			return next();
+			res.redirect("http://localhost:3000/");
 		}
 	}
 };
