@@ -5,12 +5,13 @@ const context = createContext();
 
 const UserProvider = ({ children }) => {
 	const [user, setUser] = useState("");
+	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
 		axios
 			.get("/api/user")
 			.then((res) => {
-				console.log(res);
+				console.log(res.data);
 				setUser(res.data);
 			})
 			.catch((err) => {
@@ -19,7 +20,7 @@ const UserProvider = ({ children }) => {
 	}, []);
 
 	return (
-		<context.Provider value={{ user, setUser }}>
+		<context.Provider value={{ user, setUser, posts, setPosts }}>
 			{children}
 		</context.Provider>
 	);

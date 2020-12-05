@@ -11,6 +11,11 @@ const PostSchema = new mongoose.Schema({
 		type: Number,
 		required: true
 	},
+	visibility: {
+		type: String,
+		enum: ["public", "private"],
+		default: "private"
+	},
 	createdAt: {
 		type: Date,
 		default: Date.now

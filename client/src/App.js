@@ -20,7 +20,6 @@ function App() {
 				<Navbar />
 				<Switch>
 					<Route exact path="/" component={LoginSignup} />
-
 					<Route path="/dashboard" component={Dashboard} />
 					<Route path="/profile/:id" component={Profile} />
 					<Route path="*" component={Error} />

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const Form = ({ posts, setPosts }) => {
 	const defaultState = { type: "poop", score: 1 };
-	const [state, setState] = useState(defaultState);
+	const [formState, setFormState] = useState(defaultState);
 
 	const formOptionRatings = (from, to) => {
 		const range = [];
@@ -20,20 +20,29 @@ const Form = ({ posts, setPosts }) => {
 	};
 
 	const handleChange = (e) => {
-		console.log(e.target.name, e.target.value);
-
 		const name = e.target.name;
 		const value = e.target.value;
-		setState({ ...state, [name]: value });
+		setFormState({ ...formState, [name]: value });
 	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		try {
-			axios.post("/api/addPost", state).then((res) => {
-				axios.get("/api/getPosts").then((res) => setPosts(res.data));
-			});
-			setState(defaultState);
+			axios
+				.post("/api/addPost", formState)
+				.then((res) => {
+					axios
+						.get("/api/getPosts")
+						.then((res) => {
+							console.log(res.data);
+							setPosts(res.data);
+						})
+						.catch((err) => console.error(err));
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			setFormState(defaultState);
 		} catch (err) {
 			console.error(err);
 		}
@@ -43,7 +52,11 @@ const Form = ({ posts, setPosts }) => {
 		<form onSubmit={handleSubmit}>
 			<fieldset>
 				<label htmlFor="type">Type</label>
-				<select name="type" value={state.type} onChange={handleChange}>
+				<select
+					name="type"
+					value={formState.type}
+					onChange={handleChange}
+				>
 					<option value="poop">Poop</option>
 					<option value="pee">Pee</option>
 					<option value="sex">Sex</option>
@@ -52,10 +65,20 @@ const Form = ({ posts, setPosts }) => {
 				<label htmlFor="score">Score</label>
 				<select
 					name="score"
-					value={state.score}
+					value={formState.score}
 					onChange={handleChange}
 				>
 					{formOptionRatings(1, 10)}
+				</select>
+				<label htmlFor="visibility">Visibility</label>
+
+				<select
+					name="visibility"
+					value={formState.visibility}
+					onChange={handleChange}
+				>
+					<option value="private">Private</option>
+					<option value="public">Public</option>
 				</select>
 				<input type="submit" />
 			</fieldset>

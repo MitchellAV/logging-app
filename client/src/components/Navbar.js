@@ -4,7 +4,6 @@ import UserProvider from "../contexts/UserProvider";
 
 export const Navbar = () => {
 	const { user, setUser } = useContext(UserProvider.context);
-	console.log(user);
 	return (
 		<nav className="navbar">
 			<ul className="nav-links">
