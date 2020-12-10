@@ -6,12 +6,13 @@ import UserProvider from "./contexts/UserProvider";
 import "./App.css";
 // Pages
 import Dashboard from "./pages/Dashboard";
-import LoginSignup from "./pages/LoginSignup";
 import Profile from "./pages/Profile";
 import Error from "./pages/Error";
 
 // Components
 import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 function App() {
 	return (
@@ -19,7 +20,8 @@ function App() {
 			<UserProvider>
 				<Navbar />
 				<Switch>
-					<Route exact path="/" component={LoginSignup} />
+					<Route exact path="/" component={Login} />
+					<Route path="/signup" component={Signup} />
 					<Route path="/dashboard" component={Dashboard} />
 					<Route path="/profile/:id" component={Profile} />
 					<Route path="*" component={Error} />

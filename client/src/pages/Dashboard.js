@@ -3,7 +3,7 @@ import UserProvider from "../contexts/UserProvider";
 import axios from "axios";
 
 import Form from "../components/Form";
-import LoginSignup from "./LoginSignup";
+import Login from "./Login";
 import PostsList from "../components/PostsList";
 import Loading from "../components/Loading";
 
@@ -40,7 +40,7 @@ export const Dashboard = () => {
 		</>
 	) : (
 		<>
-			<LoginSignup />
+			<Login />
 		</>
 	);
 };
